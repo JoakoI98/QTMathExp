@@ -39,4 +39,11 @@ MathConstant::MathConstant(double value): value(value)
     return;
 }
 
+double MathConstant::getValue() const
+{
+    return value;
+}
+
+
+
 

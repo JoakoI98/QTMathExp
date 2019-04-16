@@ -40,8 +40,12 @@ public:
     }
 
 
+    double getValue() const;
+
 private:
     double value;
 };
+
+
 
 #endif // MATHFINALOPERANDS_H

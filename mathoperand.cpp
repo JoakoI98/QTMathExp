@@ -22,6 +22,9 @@ std::ostream &operator<<(std::ostream &os, const MathOperand *operand)
     return os;
 }
 
+
+
+
 MathOperand::~MathOperand()
 {
     for (auto x : arguments) {

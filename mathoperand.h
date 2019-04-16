@@ -25,10 +25,21 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const MathOperand* operand);
 
+    friend MathOperand &operator+(MathOperand &operand0, const MathOperand &operand1);
+
+    friend MathOperand &operator-(MathOperand &operand0, const MathOperand &operand1);
+
+    friend MathOperand &operator/(MathOperand &operand0, const MathOperand &operand1);
+
+    friend MathOperand &operator*(MathOperand &operand0, const MathOperand &operand1);
+
+    friend MathOperand &operator-(const MathOperand &operand0);
+
+
     virtual ~MathOperand();
 protected:
     void setOp_Type(const typeEnum &value);
-    std::vector<MathOperand *> arguments;
+    std::vector<const MathOperand *> arguments;
 
 private:
     typeEnum op_Type;

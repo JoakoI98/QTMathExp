@@ -29,7 +29,8 @@ SOURCES += \
         expressionwidget.cpp \
     mathoperand.cpp \
     mathbinaryoperands.cpp \
-    mathfinaloperands.cpp
+    mathfinaloperands.cpp \
+    literalsdefinitions.cpp
 
 HEADERS += \
         expressionwidget.h \

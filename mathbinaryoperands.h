@@ -5,7 +5,7 @@
 class MathBinaryOperand : public MathOperand
 {
 public:
-    MathBinaryOperand(MathOperand *arg1, MathOperand *arg2);
+    MathBinaryOperand(MathOperand const *arg1, MathOperand const *arg2);
 
     void printExpression(std::vector<double> &arguments, std::ostream &buff = std::cout) const override;
 
@@ -23,7 +23,7 @@ private:
 class MathAddOperator : public MathBinaryOperand
 {
 public:
-    MathAddOperator(MathOperand *arg1, MathOperand *arg2);
+    MathAddOperator(MathOperand const *arg1, MathOperand const *arg2);
 
     double evaluateExpression(std::vector<double> &arguments) const override;
 };
@@ -31,7 +31,7 @@ public:
 class MathSubsOperator : public MathBinaryOperand
 {
 public:
-    MathSubsOperator(MathOperand *arg1, MathOperand *arg2);
+    MathSubsOperator(MathOperand const *arg1, MathOperand const *arg2);
 
     double evaluateExpression(std::vector<double> &arguments) const override;
 };
@@ -39,7 +39,7 @@ public:
 class MathMultOperator : public MathBinaryOperand
 {
 public:
-    MathMultOperator(MathOperand *arg1, MathOperand *arg2);
+    MathMultOperator(MathOperand const *arg1, MathOperand const *arg2);
 
     double evaluateExpression(std::vector<double> &arguments) const override;
 };
@@ -47,10 +47,11 @@ public:
 class MathDivOperator : public MathBinaryOperand
 {
 public:
-    MathDivOperator(MathOperand *arg1, MathOperand *arg2);
+    MathDivOperator(MathOperand const *arg1, MathOperand const *arg2);
 
     double evaluateExpression(std::vector<double> &arguments) const override;
 };
+
 
 
 #endif // MATHBINARYOPERANDS_H
