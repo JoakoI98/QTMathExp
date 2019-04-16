@@ -28,12 +28,14 @@ SOURCES += \
         main.cpp \
         expressionwidget.cpp \
     mathoperand.cpp \
-    mathbinaryoperands.cpp
+    mathbinaryoperands.cpp \
+    mathfinaloperands.cpp
 
 HEADERS += \
         expressionwidget.h \
     mathoperand.h \
-    mathbinaryoperands.h
+    mathbinaryoperands.h \
+    mathfinaloperands.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
