@@ -10,6 +10,8 @@ class ExpressionWidget : public QWidget
 public:
     ExpressionWidget(QWidget *parent = 0);
     ~ExpressionWidget();
+protected:
+    void paintEvent(QPaintEvent *e) override;
 };
 
 #endif // EXPRESSIONWIDGET_H

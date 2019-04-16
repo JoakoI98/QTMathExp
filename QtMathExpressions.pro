@@ -26,10 +26,14 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        expressionwidget.cpp
+        expressionwidget.cpp \
+    mathoperand.cpp \
+    mathbinaryoperands.cpp
 
 HEADERS += \
-        expressionwidget.h
+        expressionwidget.h \
+    mathoperand.h \
+    mathbinaryoperands.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
