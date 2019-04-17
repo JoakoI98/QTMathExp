@@ -14,6 +14,29 @@ ModelViewPrimitives::ModelViewPrimitives()
     setTextSize(DefaultTextSize);
 }
 
+void ModelViewPrimitives::drawPointerLine(int x2, int y2)
+{
+    int x,y;
+    std::tie(x,y) = pointer;
+    drawLine(x,y,x2,y2);
+    pointer = {x2,y2};
+}
+
+void ModelViewPrimitives::drawPointerCircle(int radius)
+{
+    int x,y;
+    std::tie(x,y) = pointer;
+    drawCircle(x+radius, y, radius);
+    pointer = {x + 2*radius, y};
+}
+
+void ModelViewPrimitives::drawPointerText(std::string text)
+{
+    int x,y;
+    std::tie(x,y) = pointer;
+    drawText(text,x ,y);
+}
+
 std::pair<int, int> ModelViewPrimitives::getPointer() const
 {
     return pointer;
@@ -77,4 +100,9 @@ int ModelViewPrimitives::getLineSize() const
 void ModelViewPrimitives::setLineSize(int value)
 {
     lineSize = value;
+}
+
+ModelViewPrimitives::~ModelViewPrimitives()
+{
+    return;
 }

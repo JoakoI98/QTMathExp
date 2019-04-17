@@ -17,6 +17,8 @@ public:
 
     void setPainter(QPainter *value);
 
+    ~QPainterViewObject() override;
+
 private:
     QPainter *painter = nullptr;
     QPen defaultPen;

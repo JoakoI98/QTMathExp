@@ -1,4 +1,5 @@
 #include "qpainterviewobject.h"
+#include <QString>
 
 QPainterViewObject::QPainterViewObject(): defaultPen(Qt::PenStyle::SolidLine), defaulBrush(Qt::BrushStyle::SolidPattern)
 {
@@ -33,9 +34,32 @@ void QPainterViewObject::drawCircle(int x, int y, int radius)
 
 }
 
+void QPainterViewObject::drawText(std::string text, int x, int y)
+{
+    int r, g, b;
+    std::tie(r, g, b) = getTextColor();
+    defaultPen.setColor(QColor(r, g, b));
+    QFont currFont = painter->font();
+    currFont.setPointSize(getTextSize());
+
+    painter->drawText(x, y, QString::fromStdString(text));
+
+    QFontMetrics metric = painter->fontMetrics();
+    setPointer(x + metric.width(QString::fromStdString(text)),y);
+    return;
+}
+
 void QPainterViewObject::setPainter(QPainter *value)
 {
     painter = value;
 }
+
+QPainterViewObject::~QPainterViewObject()
+{
+    if(painter != nullptr) delete painter;
+    return;
+}
+
+
 
 

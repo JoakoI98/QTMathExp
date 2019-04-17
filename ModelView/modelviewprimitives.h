@@ -11,27 +11,13 @@ public:
     ModelViewPrimitives();
 
     virtual void drawLine(int x1, int y1, int x2, int y2)   = 0;
-    void drawPointerLine(int x2, int y2){
-        int x,y;
-        std::tie(x,y) = pointer;
-        drawLine(x,y,x2,y2);
-        pointer = {x2,y2};
-    }
+    void drawPointerLine(int x2, int y2);
 
     virtual void drawCircle(int x1, int y1, int radius)  = 0;
-    void drawPointerCircle(int radius){
-        int x,y;
-        std::tie(x,y) = pointer;
-        drawCircle(x+radius, y, radius);
-        pointer = {x + 2*radius, y};
-    }
+    void drawPointerCircle(int radius);
 
     virtual void drawText(std::string text, int x, int y)  = 0;
-    virtual void drawPointerText(std::string text){
-        int x,y;
-        std::tie(x,y) = pointer;
-        drawText(text,x ,y);
-    }
+    virtual void drawPointerText(std::string text);
 
 
     std::pair<int, int> getPointer() const;

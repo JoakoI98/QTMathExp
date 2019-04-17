@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
         freopen("CONOUT$", "w", stderr);
     }
 
-    MathOperand &res2 = (0_v+1_v)/(0_v - 3_c);
+    MathOperand &res2 = -1_c*((0_v+1_v)/(0_v - 3_c));
 
     std::vector<double> args;
     args.clear();
