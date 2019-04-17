@@ -1,4 +1,6 @@
 #include "mathoperand.h"
+#include <exception>
+
 
 MathOperand::MathOperand()
 {
@@ -35,4 +37,14 @@ MathOperand::~MathOperand()
 void MathOperand::setOp_Type(const MathOperand::typeEnum &value)
 {
     op_Type = value;
+}
+
+ModelViewPrimitives *MathOperand::getModelView() const
+{
+    return ModelView;
+}
+
+void MathOperand::setModelView(ModelViewPrimitives *value)
+{
+    ModelView = value;
 }

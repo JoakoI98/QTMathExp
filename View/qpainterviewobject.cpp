@@ -13,6 +13,7 @@ QPainterViewObject::QPainterViewObject(): defaultPen(Qt::PenStyle::SolidLine), d
 void QPainterViewObject::drawLine(int x1, int y1, int x2, int y2)
 {
 
+    if(painter == nullptr) throw "Painter null reference";
     int r,g,b;
     std::tie(r, g, b) = getLineColor();
     defaultPen.setColor(QColor(r,g,b));
@@ -23,6 +24,7 @@ void QPainterViewObject::drawLine(int x1, int y1, int x2, int y2)
 
 void QPainterViewObject::drawCircle(int x, int y, int radius)
 {
+    if(painter == nullptr) throw "Painter null reference";
     int r,g,b;
     std::tie(r, g, b) = getLineColor();
     defaultPen.setColor(QColor(r,g,b));
@@ -36,6 +38,7 @@ void QPainterViewObject::drawCircle(int x, int y, int radius)
 
 void QPainterViewObject::drawText(std::string text, int x, int y)
 {
+    if(painter == nullptr) throw "Painter null reference";
     int r, g, b;
     std::tie(r, g, b) = getTextColor();
     defaultPen.setColor(QColor(r, g, b));

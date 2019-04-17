@@ -1,10 +1,13 @@
-#include "expressionwidget.h"
+#include "View/expressionwidget.h"
 #include <QApplication>
 #include <windows.h>
 #include <iostream>
+#include <QMainWindow>
 #include "Controller/mathbinaryoperands.h"
 #include "Controller/mathfinaloperands.h"
 #include "Controller/literalsdefinitions.cpp"
+#include <QVBoxLayout>
+#include <QSpacerItem>
 
 
 
@@ -15,23 +18,23 @@ int main(int argc, char *argv[])
         freopen("CONOUT$", "w", stdout);
         freopen("CONOUT$", "w", stderr);
     }
+    QApplication a(argc, argv);
+    QVBoxLayout *lw = new QVBoxLayout();
+    ExpressionWidget w0;
+    w0.setMinimumHeight(50);
+    MathOperand &op = 10_c;
+    w0.getLinker().link(&op);
+    op.getModelView()->setPointer(15,15);
+    if(op.getModelView() == nullptr) std::cout << "Not linked" << std::endl;
+    else std::cout << "Linked" << std::endl;
+    w0.update();
+    lw->addWidget(&w0);
 
-    MathOperand &res2 = -1_c*((0_v+1_v)/(0_v - 3_c));
 
-    std::vector<double> args;
-    args.clear();
-    args.push_back(5);
-    args.push_back(5);
-    std::cout << res2 << std::endl << res2.evaluateExpression(args) << std::endl;
-
-
-    system("pause");
-
-
-    /*QApplication a(argc, argv);
-    ExpressionWidget w;
-    w.show();
+    auto mw = new QWidget;
+    mw->setLayout(lw);
+    mw->show();
     //FirstChange
-    return a.exec();*/
-    return 0;
+    return a.exec();
+
 }

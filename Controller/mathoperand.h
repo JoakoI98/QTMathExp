@@ -23,7 +23,11 @@ public:
 
     virtual void printExpression(std::ostream &buff = std::cout) const = 0;
 
-    virtual void drawExpression() const = 0;
+    virtual void drawExpression() const{
+        if(ModelView == nullptr) throw "Not link with view";
+    }
+
+
 
     friend std::ostream& operator<<(std::ostream& os, const MathOperand& operand);
 
@@ -39,13 +43,18 @@ public:
 
     friend MathOperand &operator-(const MathOperand &operand0);
 
+    ModelViewPrimitives *getModelView() const;
+    void setModelView(ModelViewPrimitives *value);
+
     virtual ~MathOperand();
+
+
 protected:
     void setOp_Type(const typeEnum &value);
 
     std::vector<const MathOperand *> arguments;
 
-    ModelViewPrimitives *ModelView;
+    ModelViewPrimitives *ModelView = nullptr;
 
 private:
     typeEnum op_Type;

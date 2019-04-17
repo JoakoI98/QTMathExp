@@ -26,21 +26,23 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        expressionwidget.cpp \
     Controller/mathbinaryoperands.cpp \
     Controller/literalsdefinitions.cpp \
     Controller/mathfinaloperands.cpp \
     Controller/mathoperand.cpp \
     ModelView/modelviewprimitives.cpp \
-    View/qpainterviewobject.cpp
+    View/qpainterviewobject.cpp \
+    View/expressionwidget.cpp \
+    ModelView/modelviewlinker.cpp
 
 HEADERS += \
-        expressionwidget.h \
     Controller/mathbinaryoperands.h \
     Controller/mathfinaloperands.h \
     Controller/mathoperand.h \
     ModelView/modelviewprimitives.h \
-    View/qpainterviewobject.h
+    View/qpainterviewobject.h \
+    View/expressionwidget.h \
+    ModelView/modelviewlinker.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

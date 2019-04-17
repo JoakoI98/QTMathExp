@@ -30,6 +30,7 @@ void MathVariable::printExpression(std::ostream &buff) const
 
 void MathVariable::drawExpression() const
 {
+    MathOperand::drawExpression();
     ModelView->drawPointerText("x" + std::to_string(id) + " ");
 }
 
@@ -46,6 +47,7 @@ MathConstant::MathConstant(double value): value(value)
 
 void MathConstant::drawExpression() const
 {
+    MathOperand::drawExpression();
     ModelView->drawPointerText(std::to_string(value) + " ");
 }
 

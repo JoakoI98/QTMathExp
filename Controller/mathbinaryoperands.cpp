@@ -28,6 +28,7 @@ double MathAddOperator::evaluateExpression(std::vector<double> &arguments) const
 
 void MathAddOperator::drawExpression() const
 {
+    MathOperand::drawExpression();
     int curr_x, curr_y;
     std::tie(curr_x, curr_y) = ModelView->getPointer();
     ModelView->setPointer(curr_x + 2, curr_y + ModelView->getTextSize()/2);
@@ -94,6 +95,7 @@ double MathSubsOperator::evaluateExpression(std::vector<double> &arguments) cons
 
 void MathSubsOperator::drawExpression() const
 {
+    MathOperand::drawExpression();
     int curr_x, curr_y;
     std::tie(curr_x, curr_y) = ModelView->getPointer();
     ModelView->setPointer(curr_x + 2, curr_y + ModelView->getTextSize()/2);
@@ -118,6 +120,7 @@ double MathMultOperator::evaluateExpression(std::vector<double> &arguments) cons
 
 void MathMultOperator::drawExpression() const
 {
+    MathOperand::drawExpression();
     int curr_x, curr_y;
     std::tie(curr_x, curr_y) = ModelView->getPointer();
     ModelView->setPointer(curr_x + 2, curr_y + ModelView->getTextSize()/2);
@@ -144,6 +147,7 @@ double MathDivOperator::evaluateExpression(std::vector<double> &arguments) const
 }
 
 void MathDivOperator::drawExpression() const {
+    MathOperand::drawExpression();
     return;
 }
 
