@@ -26,6 +26,8 @@ public:
     MathAddOperator(MathOperand const *arg1, MathOperand const *arg2);
 
     double evaluateExpression(std::vector<double> &arguments) const override;
+
+    void drawExpression() const override;
 };
 
 class MathSubsOperator : public MathBinaryOperand
@@ -34,6 +36,8 @@ public:
     MathSubsOperator(MathOperand const *arg1, MathOperand const *arg2);
 
     double evaluateExpression(std::vector<double> &arguments) const override;
+
+    void drawExpression() const override;
 };
 
 class MathMultOperator : public MathBinaryOperand
@@ -42,6 +46,8 @@ public:
     MathMultOperator(MathOperand const *arg1, MathOperand const *arg2);
 
     double evaluateExpression(std::vector<double> &arguments) const override;
+
+    void drawExpression() const override;
 };
 
 class MathDivOperator : public MathBinaryOperand
@@ -50,6 +56,8 @@ public:
     MathDivOperator(MathOperand const *arg1, MathOperand const *arg2);
 
     double evaluateExpression(std::vector<double> &arguments) const override;
+
+    void drawExpression() const override;
 };
 
 

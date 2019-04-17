@@ -26,6 +26,18 @@ double MathAddOperator::evaluateExpression(std::vector<double> &arguments) const
     return this->arguments[0]->evaluateExpression(arguments) + this->arguments[1]->evaluateExpression(arguments);
 }
 
+void MathAddOperator::drawExpression() const
+{
+    int curr_x, curr_y;
+    std::tie(curr_x, curr_y) = ModelView->getPointer();
+    ModelView->setPointer(curr_x + 2, curr_y + ModelView->getTextSize()/2);
+    std::tie(curr_x, curr_y) = ModelView->getPointer();
+    ModelView->drawPointerLine(curr_x + 5, curr_y);
+    ModelView->drawLine(curr_x + 3, curr_y + ModelView->getTextSize()/2, curr_x + 3, curr_y - ModelView->getTextSize()/2);
+    std::tie(curr_x, curr_y) = ModelView->getPointer();
+    ModelView->setPointer(curr_x + 2, curr_y - ModelView->getTextSize()/2);
+}
+
 void MathBinaryOperand::printExpression(std::vector<double> &arguments, std::ostream &buff) const
 {
     buff << this->arguments[0] << stringRep << this->arguments[1];
@@ -80,6 +92,18 @@ double MathSubsOperator::evaluateExpression(std::vector<double> &arguments) cons
     return this->arguments[0]->evaluateExpression(arguments) - this->arguments[1]->evaluateExpression(arguments);
 }
 
+void MathSubsOperator::drawExpression() const
+{
+    int curr_x, curr_y;
+    std::tie(curr_x, curr_y) = ModelView->getPointer();
+    ModelView->setPointer(curr_x + 2, curr_y + ModelView->getTextSize()/2);
+    std::tie(curr_x, curr_y) = ModelView->getPointer();
+    ModelView->drawPointerLine(curr_x + 5, curr_y);
+    std::tie(curr_x, curr_y) = ModelView->getPointer();
+    ModelView->setPointer(curr_x + 2, curr_y - ModelView->getTextSize()/2);
+}
+
+
 MathMultOperator::MathMultOperator(MathOperand const *arg1, MathOperand const *arg2): MathBinaryOperand (arg1, arg2)
 {
     setOp_Type(MathOperand::op_Mult);
@@ -91,6 +115,18 @@ double MathMultOperator::evaluateExpression(std::vector<double> &arguments) cons
 {
     return this->arguments[0]->evaluateExpression(arguments) * this->arguments[1]->evaluateExpression(arguments);
 }
+
+void MathMultOperator::drawExpression() const
+{
+    int curr_x, curr_y;
+    std::tie(curr_x, curr_y) = ModelView->getPointer();
+    ModelView->setPointer(curr_x + 2, curr_y + ModelView->getTextSize()/2);
+    std::tie(curr_x, curr_y) = ModelView->getPointer();
+    ModelView->drawPointerCircle(2);
+    std::tie(curr_x, curr_y) = ModelView->getPointer();
+    ModelView->setPointer(curr_x + 2, curr_y - ModelView->getTextSize()/2);
+}
+
 
 MathDivOperator::MathDivOperator(MathOperand const *arg1, MathOperand const *arg2): MathBinaryOperand (arg1, arg2)
 {
@@ -105,6 +141,10 @@ double MathDivOperator::evaluateExpression(std::vector<double> &arguments) const
     if (val2 == 0)
         throw "Division by 0";
     return this->arguments[0]->evaluateExpression(arguments) / val2;
+}
+
+void MathDivOperator::drawExpression() const {
+    return;
 }
 
 MathOperand &operator+(MathOperand &operand0, const MathOperand &operand1)

@@ -5,6 +5,8 @@
 
 #include <iostream>
 
+#include "../ModelView/modelviewprimitives.h"
+
 
 class MathOperand
 {
@@ -21,6 +23,8 @@ public:
 
     virtual void printExpression(std::ostream &buff = std::cout) const = 0;
 
+    virtual void drawExpression() const = 0;
+
     friend std::ostream& operator<<(std::ostream& os, const MathOperand& operand);
 
     friend std::ostream& operator<<(std::ostream& os, const MathOperand* operand);
@@ -35,11 +39,13 @@ public:
 
     friend MathOperand &operator-(const MathOperand &operand0);
 
-
     virtual ~MathOperand();
 protected:
     void setOp_Type(const typeEnum &value);
+
     std::vector<const MathOperand *> arguments;
+
+    ModelViewPrimitives *ModelView;
 
 private:
     typeEnum op_Type;

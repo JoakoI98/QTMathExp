@@ -2,9 +2,9 @@
 #include <QApplication>
 #include <windows.h>
 #include <iostream>
-#include "mathbinaryoperands.h"
-#include "mathfinaloperands.h"
-#include "literalsdefinitions.cpp"
+#include "Controller/mathbinaryoperands.h"
+#include "Controller/mathfinaloperands.h"
+#include "Controller/literalsdefinitions.cpp"
 
 
 
@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
         freopen("CONOUT$", "w", stderr);
     }
 
-    MathOperand &res2 = (0_v+1_v)/(0_v - 3._c);
+    MathOperand &res2 = (0_v+1_v)/(0_v - 3_c);
 
     std::vector<double> args;
     args.clear();

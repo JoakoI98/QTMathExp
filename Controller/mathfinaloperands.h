@@ -16,6 +16,8 @@ public:
 
     void printExpression(std::ostream &buff = std::cout) const override;
 
+    void drawExpression() const override;
+
     unsigned int getId() const;
 
 private:
@@ -33,6 +35,8 @@ public:
     void printExpression(std::vector<double> &arguments, std::ostream &buff = std::cout) const override {buff << value << " ";}
 
     void printExpression(std::ostream &buff = std::cout) const override {buff << value << " ";}
+
+    void drawExpression() const override;
 
     MathConstant& operator=(double val){
         this->value = val;
