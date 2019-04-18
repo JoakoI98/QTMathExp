@@ -11,6 +11,10 @@ public:
 
     void printExpression(std::ostream &buff = std::cout) const override;
 
+    virtual void drawThis(ModelViewPrimitives *primitivesReference = nullptr) const = 0;
+
+    std::tuple<int,int,int,int> drawExpression(ModelViewPrimitives *primitivesReference = nullptr) const override;
+
 protected:
     void setStringRep(const std::string &value);
 
@@ -27,7 +31,9 @@ public:
 
     double evaluateExpression(std::vector<double> &arguments) const override;
 
-    void drawExpression() const override;
+
+
+    void drawThis(ModelViewPrimitives *primitivesReference = nullptr) const override;
 };
 
 class MathSubsOperator : public MathBinaryOperand
@@ -37,7 +43,7 @@ public:
 
     double evaluateExpression(std::vector<double> &arguments) const override;
 
-    void drawExpression() const override;
+    void drawThis(ModelViewPrimitives *primitivesReference = nullptr) const override;
 };
 
 class MathMultOperator : public MathBinaryOperand
@@ -47,7 +53,7 @@ public:
 
     double evaluateExpression(std::vector<double> &arguments) const override;
 
-    void drawExpression() const override;
+    void drawThis(ModelViewPrimitives *primitivesReference = nullptr) const override;
 };
 
 class MathDivOperator : public MathBinaryOperand
@@ -57,7 +63,10 @@ public:
 
     double evaluateExpression(std::vector<double> &arguments) const override;
 
-    void drawExpression() const override;
+    std::tuple<int,int,int,int> drawExpression(ModelViewPrimitives *primitivesReference = nullptr) const override;
+
+    void drawThis(ModelViewPrimitives *primitivesReference = nullptr) const override {return;}
+
 };
 
 

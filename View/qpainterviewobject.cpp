@@ -1,5 +1,6 @@
 #include "qpainterviewobject.h"
 #include <QString>
+#include <math.h>
 
 QPainterViewObject::QPainterViewObject(): defaultPen(Qt::PenStyle::SolidLine), defaulBrush(Qt::BrushStyle::SolidPattern)
 {
@@ -10,21 +11,27 @@ QPainterViewObject::QPainterViewObject(): defaultPen(Qt::PenStyle::SolidLine), d
     defaulBrush.setColor(QColor(r, g, b));
 }
 
-void QPainterViewObject::drawLine(int x1, int y1, int x2, int y2)
+std::tuple<int, int, int, int> QPainterViewObject::drawLine(int x1, int y1, int x2, int y2)
 {
 
     if(painter == nullptr) throw "Painter null reference";
+
     int r,g,b;
     std::tie(r, g, b) = getLineColor();
     defaultPen.setColor(QColor(r,g,b));
     defaultPen.setWidth(getLineSize());
 
-    painter->drawLine(x1, y1, x2, y2);
+    painter->setPen(defaultPen);
+
+    if(getSeeing()) painter->drawLine(x1, y1, x2, y2);
+
+    return std::tuple<int,int,int,int>(x1,y1,x2,y2);
 }
 
-void QPainterViewObject::drawCircle(int x, int y, int radius)
+std::tuple<int, int, int, int> QPainterViewObject::drawCircle(int x, int y, int radius)
 {
     if(painter == nullptr) throw "Painter null reference";
+
     int r,g,b;
     std::tie(r, g, b) = getLineColor();
     defaultPen.setColor(QColor(r,g,b));
@@ -32,24 +39,53 @@ void QPainterViewObject::drawCircle(int x, int y, int radius)
     std::tie(r, g, b) = getBkgColor();
     defaulBrush.setColor(QColor(r,g,b));
 
-    painter->drawEllipse(x,y,radius,radius);
+    painter->setPen(defaultPen);
+    painter->setBrush(defaulBrush);
+
+    if(getSeeing()) painter->drawEllipse(x,y,radius,radius);
+
+    return std::tuple<int,int,int,int>(x-radius, y-radius, x+radius, y + radius);
 
 }
 
-void QPainterViewObject::drawText(std::string text, int x, int y)
+std::tuple<int, int, int, int> QPainterViewObject::drawText(std::string text, int x, int y)
+{
+    if(painter == nullptr) throw "Painter null reference";
+
+    int r, g, b;
+    std::tie(r, g, b) = getTextColor();
+    defaultPen.setColor(QColor(r, g, b));
+    QFont currFont = painter->font();
+    currFont.setWeight(0);
+    currFont.setPixelSize(getTextSize());
+    painter->setFont(currFont);
+    painter->setPen(defaultPen);
+
+    if(getSeeing()) painter->drawText(x, y, QString::fromStdString(text));
+
+    QFontMetrics metric = painter->fontMetrics();
+    setPointer(x + metric.width(QString::fromStdString(text)),y);
+
+    return std::tuple<int,int,int,int>(x,y - (metric.height() - metric.xHeight()),x+metric.width(QString::fromStdString(text)), y);
+}
+
+std::tuple<int, int, int, int> QPainterViewObject::draw32UnicodeChar(uint32_t ch, int x, int y)
 {
     if(painter == nullptr) throw "Painter null reference";
     int r, g, b;
     std::tie(r, g, b) = getTextColor();
     defaultPen.setColor(QColor(r, g, b));
     QFont currFont = painter->font();
-    currFont.setPointSize(getTextSize());
+    currFont.setWeight(0);
+    currFont.setPixelSize(getTextSize());
+    painter->setFont(currFont);
 
-    painter->drawText(x, y, QString::fromStdString(text));
-
+    painter->setPen(defaultPen);
+    if(getSeeing()) painter->drawText(x, y - round(static_cast<float>(getTextSize())/10), QString(QChar(ch)));
     QFontMetrics metric = painter->fontMetrics();
-    setPointer(x + metric.width(QString::fromStdString(text)),y);
-    return;
+    setPointer(x + metric.width(QString(QChar(ch))),y);
+
+    return std::tuple<int,int,int,int>(x,y - metric.xHeight(),x+metric.width(QString(QChar(ch))), y);
 }
 
 void QPainterViewObject::setPainter(QPainter *value)

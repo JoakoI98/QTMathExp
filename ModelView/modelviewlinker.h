@@ -10,9 +10,11 @@ public:
 
     bool getReadyToDraw() const;
     void setReadyToDraw(bool value);
-    void sendDraw();
+    std::tuple<int, int, int, int> sendDraw();
+    std::tuple<int, int, int, int> getSize();
     void link(MathOperand *exp);
     bool isLinked();
+
 
 private:
     MathOperand *linkedExp = nullptr;

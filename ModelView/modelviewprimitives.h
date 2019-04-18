@@ -10,14 +10,17 @@ class ModelViewPrimitives
 public:
     ModelViewPrimitives();
 
-    virtual void drawLine(int x1, int y1, int x2, int y2)   = 0;
-    void drawPointerLine(int x2, int y2);
+    virtual std::tuple<int,int,int,int> drawLine(int x1, int y1, int x2, int y2)   = 0;
+    std::tuple<int,int,int,int> drawPointerLine(int x2, int y2);
 
-    virtual void drawCircle(int x1, int y1, int radius)  = 0;
-    void drawPointerCircle(int radius);
+    virtual std::tuple<int,int,int,int> drawCircle(int x1, int y1, int radius)  = 0;
+    std::tuple<int,int,int,int> drawPointerCircle(int radius);
 
-    virtual void drawText(std::string text, int x, int y)  = 0;
-    virtual void drawPointerText(std::string text);
+    virtual std::tuple<int,int,int,int> drawText(std::string text, int x, int y)  = 0;
+    virtual std::tuple<int,int,int,int> drawPointerText(std::string text);
+
+    virtual std::tuple<int,int,int,int> draw32UnicodeChar(uint32_t ch, int x, int y) = 0;
+    virtual std::tuple<int,int,int,int> drawPointer32UnicodeChar(uint32_t ch);
 
 
     std::pair<int, int> getPointer() const;
@@ -34,8 +37,16 @@ public:
     void setTextSize(int value);
     int getLineSize() const;
     void setLineSize(int value);
+    void setTextSizeNF(int value);
+    bool getSeeing() const;
+    void setSeeing(bool seeing);
+    unsigned int getFloatRepresentation() const;
+    void setFloatRepresentation(unsigned int value);
+    char getCommaRepresentation() const;
+    void setCommaRepresentation(char value);
 
     virtual ~ModelViewPrimitives();
+
 
 
 private:
@@ -46,6 +57,9 @@ private:
     bool autoAvancePointer = true;
     int textSize;
     int lineSize;
+    bool _seeing = true;
+    unsigned int floatRepresentation = 5;
+    char commaRepresentation = ',';
 };
 
 #endif // MODELVIEWPRIMITIVES_H

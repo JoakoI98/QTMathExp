@@ -18,16 +18,16 @@ int main(int argc, char *argv[])
         freopen("CONOUT$", "w", stdout);
         freopen("CONOUT$", "w", stderr);
     }
+
+
+
     QApplication a(argc, argv);
     QVBoxLayout *lw = new QVBoxLayout();
     ExpressionWidget w0;
-    w0.setMinimumHeight(50);
-    MathOperand &op = 10_c;
+
+
+    MathOperand &op = 10.0103000_c * 0_v;
     w0.getLinker().link(&op);
-    op.getModelView()->setPointer(15,15);
-    if(op.getModelView() == nullptr) std::cout << "Not linked" << std::endl;
-    else std::cout << "Linked" << std::endl;
-    w0.update();
     lw->addWidget(&w0);
 
 

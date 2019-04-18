@@ -11,9 +11,10 @@ class QPainterViewObject : public ModelViewPrimitives
 public:
     QPainterViewObject();
 
-    void drawLine(int x1, int y1, int x2, int y2)  override;
-    void drawCircle(int x, int y, int radius)  override;
-    void drawText(std::string text, int x, int y) override;
+    std::tuple<int,int,int,int> drawLine(int x1, int y1, int x2, int y2)  override;
+    std::tuple<int,int,int,int> drawCircle(int x, int y, int radius)  override;
+    std::tuple<int,int,int,int> drawText(std::string text, int x, int y) override;
+    std::tuple<int,int,int,int> draw32UnicodeChar(uint32_t ch, int x, int y) override;
 
     void setPainter(QPainter *value);
 

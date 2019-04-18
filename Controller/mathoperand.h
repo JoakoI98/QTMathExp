@@ -23,9 +23,13 @@ public:
 
     virtual void printExpression(std::ostream &buff = std::cout) const = 0;
 
-    virtual void drawExpression() const{
-        if(ModelView == nullptr) throw "Not link with view";
+    virtual std::tuple<int,int,int,int> drawExpression(ModelViewPrimitives *primitivesReference = nullptr) const{
+        if(ModelView == nullptr && primitivesReference == nullptr) throw "Not link with view";
+        return std::tuple<int, int, int, int>(0,0,0,0);
     }
+
+    std::tuple<int,int,int,int> getSize() const;
+
 
 
 

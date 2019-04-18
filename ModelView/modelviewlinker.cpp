@@ -15,10 +15,16 @@ void ModelViewLinker::setReadyToDraw(bool value)
     readyToDraw = value;
 }
 
-void ModelViewLinker::sendDraw()
+std::tuple<int, int, int, int> ModelViewLinker::sendDraw()
 {
     if(linkedExp == nullptr) throw "Not linked expression";
-    linkedExp->drawExpression();
+    return linkedExp->drawExpression();
+}
+
+std::tuple<int, int, int, int> ModelViewLinker::getSize()
+{
+    if(linkedExp == nullptr) throw "Not linked expression";
+    return linkedExp->getSize();
 }
 
 void ModelViewLinker::link(MathOperand *exp)
@@ -29,7 +35,5 @@ void ModelViewLinker::link(MathOperand *exp)
 
 bool ModelViewLinker::isLinked()
 {
-    if(linkedExp == nullptr) std::cout << "Link fallido" << std::endl;
-    else std::cout << "Link correcto" << std::endl;
     return linkedExp == nullptr ? false: true;
 }

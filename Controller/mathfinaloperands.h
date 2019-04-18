@@ -1,6 +1,8 @@
 #ifndef MATHFINALOPERANDS_H
 #define MATHFINALOPERANDS_H
 
+
+
 #include "mathoperand.h"
 
 
@@ -16,7 +18,7 @@ public:
 
     void printExpression(std::ostream &buff = std::cout) const override;
 
-    void drawExpression() const override;
+    std::tuple<int,int,int,int> drawExpression(ModelViewPrimitives *primitivesReference = nullptr) const override;
 
     unsigned int getId() const;
 
@@ -36,7 +38,7 @@ public:
 
     void printExpression(std::ostream &buff = std::cout) const override {buff << value << " ";}
 
-    void drawExpression() const override;
+    std::tuple<int,int,int,int> drawExpression(ModelViewPrimitives *primitivesReference = nullptr) const override;
 
     MathConstant& operator=(double val){
         this->value = val;

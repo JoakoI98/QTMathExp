@@ -14,27 +14,36 @@ ModelViewPrimitives::ModelViewPrimitives()
     setTextSize(DefaultTextSize);
 }
 
-void ModelViewPrimitives::drawPointerLine(int x2, int y2)
+std::tuple<int,int,int,int> ModelViewPrimitives::drawPointerLine(int x2, int y2)
 {
     int x,y;
     std::tie(x,y) = pointer;
-    drawLine(x,y,x2,y2);
+    std::tuple<int,int,int,int> rect = drawLine(x,y,x2,y2);
     pointer = {x2,y2};
+    return rect;
 }
 
-void ModelViewPrimitives::drawPointerCircle(int radius)
+std::tuple<int,int,int,int> ModelViewPrimitives::drawPointerCircle(int radius)
 {
     int x,y;
     std::tie(x,y) = pointer;
-    drawCircle(x+radius, y, radius);
+    std::tuple<int,int,int,int> rect = drawCircle(x+radius, y, radius);
     pointer = {x + 2*radius, y};
+    return rect;
 }
 
-void ModelViewPrimitives::drawPointerText(std::string text)
+std::tuple<int,int,int,int> ModelViewPrimitives::drawPointerText(std::string text)
 {
     int x,y;
     std::tie(x,y) = pointer;
-    drawText(text,x ,y);
+    return drawText(text,x ,y);
+}
+
+std::tuple<int,int,int,int> ModelViewPrimitives::drawPointer32UnicodeChar(uint32_t ch)
+{
+    int x,y;
+    std::tie(x,y) = pointer;
+    return draw32UnicodeChar(ch, x, y);
 }
 
 std::pair<int, int> ModelViewPrimitives::getPointer() const
@@ -89,7 +98,17 @@ int ModelViewPrimitives::getTextSize() const
 
 void ModelViewPrimitives::setTextSize(int value)
 {
-    textSize = value;
+    int tz = value;
+    if(value > 15) tz = 15;
+    else if(value < 12) tz = 12;
+    textSize = tz;
+}
+
+void ModelViewPrimitives::setTextSizeNF(int value)
+{
+    int tz = value;
+    if(value > 15) tz = 15;
+    textSize = tz;
 }
 
 int ModelViewPrimitives::getLineSize() const
@@ -105,4 +124,34 @@ void ModelViewPrimitives::setLineSize(int value)
 ModelViewPrimitives::~ModelViewPrimitives()
 {
     return;
+}
+
+unsigned int ModelViewPrimitives::getFloatRepresentation() const
+{
+    return floatRepresentation;
+}
+
+void ModelViewPrimitives::setFloatRepresentation(unsigned int value)
+{
+    floatRepresentation = value;
+}
+
+char ModelViewPrimitives::getCommaRepresentation() const
+{
+    return commaRepresentation;
+}
+
+void ModelViewPrimitives::setCommaRepresentation(char value)
+{
+    commaRepresentation = value;
+}
+
+bool ModelViewPrimitives::getSeeing() const
+{
+    return _seeing;
+}
+
+void ModelViewPrimitives::setSeeing(bool seeing)
+{
+    _seeing = seeing;
 }
