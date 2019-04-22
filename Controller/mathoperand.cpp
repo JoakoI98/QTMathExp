@@ -12,29 +12,34 @@ MathOperand::typeEnum MathOperand::getOp_Type() const
     return op_Type;
 }
 
-std::tuple<int, int, int, int> MathOperand::getSize() const
+std::tuple<int, int, int, int> MathOperand::getSize(ModelViewPrimitives *primitivesReference) const
 {
-    if(ModelView == nullptr) throw "Not linked view, or trying to get size of not mother expresion";
+    ModelViewPrimitives *__ModelView = primitivesReference;
+    if(primitivesReference == nullptr) __ModelView = ModelView;
 
-    ModelView->setSeeing(false);
+    bool oldSeeing = __ModelView->getSeeing();
+    bool oldGettingSize = __ModelView->getGetingSize();
+    __ModelView->setSeeing(false);
+    __ModelView->setGetingSize(true);
 
-    std::pair<int,int> pointer = ModelView->getPointer();
-    std::tuple<int, int, int> bkgColor = ModelView->getBkgColor();
-    std::tuple<int, int, int> txtColor = ModelView->getTextColor();
-    std::tuple<int, int, int> lineColor = ModelView->getLineColor();
-    int txtSize = ModelView->getTextSize();
-    int lineSize = ModelView->getLineSize();
+    std::pair<int,int> pointer = __ModelView->getPointer();
+    std::tuple<int, int, int> bkgColor = __ModelView->getBkgColor();
+    std::tuple<int, int, int> txtColor = __ModelView->getTextColor();
+    std::tuple<int, int, int> lineColor = __ModelView->getLineColor();
+    int txtSize = __ModelView->getTextSize();
+    int lineSize = __ModelView->getLineSize();
 
-    std::tuple<int, int, int, int> rect = drawExpression();
+    std::tuple<int, int, int, int> rect = drawExpression(__ModelView);
 
-    ModelView->setPointer(pointer);
-    ModelView->setBkgColor(bkgColor);
-    ModelView->setTextColor(txtColor);
-    ModelView->setLineColor(lineColor);
-    ModelView->setTextSizeNF(txtSize);
-    ModelView->setLineSize(lineSize);
+    __ModelView->setPointer(pointer);
+    __ModelView->setBkgColor(bkgColor);
+    __ModelView->setTextColor(txtColor);
+    __ModelView->setLineColor(lineColor);
+    __ModelView->setTextSizeNF(txtSize);
+    __ModelView->setLineSize(lineSize);
 
-    ModelView->setSeeing(true);
+    __ModelView->setSeeing(oldSeeing);
+    __ModelView->setGetingSize(oldGettingSize);
 
     return rect;
 }

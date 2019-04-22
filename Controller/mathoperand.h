@@ -12,7 +12,7 @@ class MathOperand
 {
 public:
     MathOperand();
-    enum typeEnum {op_Add, op_Subs, op_Mult, op_Div, op_Const, op_Var};
+    enum typeEnum {op_Add, op_Subs, op_Mult, op_Div, op_Power, op_Root, op_Const, op_Var, op_Other};
     typeEnum getType();
 
     typeEnum getOp_Type() const;
@@ -28,7 +28,7 @@ public:
         return std::tuple<int, int, int, int>(0,0,0,0);
     }
 
-    std::tuple<int,int,int,int> getSize() const;
+    std::tuple<int,int,int,int> getSize(ModelViewPrimitives *primitivesReference = nullptr) const;
 
 
 
@@ -44,6 +44,9 @@ public:
     friend MathOperand &operator/(MathOperand &operand0, const MathOperand &operand1);
 
     friend MathOperand &operator*(MathOperand &operand0, const MathOperand &operand1);
+
+    friend MathOperand &operator^(MathOperand &operand0, const MathOperand &operand1);
+
 
     friend MathOperand &operator-(const MathOperand &operand0);
 

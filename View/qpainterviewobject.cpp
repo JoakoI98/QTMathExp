@@ -13,8 +13,14 @@ QPainterViewObject::QPainterViewObject(): defaultPen(Qt::PenStyle::SolidLine), d
 
 std::tuple<int, int, int, int> QPainterViewObject::drawLine(int x1, int y1, int x2, int y2)
 {
-
-    if(painter == nullptr) throw "Painter null reference";
+    bool haveToDeletePainter = false;
+    if(painter == nullptr) {
+        if(getGetingSize()){
+            painter = new QPainter();
+            haveToDeletePainter = true;
+        }
+        else throw "Painter null reference";
+    }
 
     int r,g,b;
     std::tie(r, g, b) = getLineColor();
@@ -25,12 +31,24 @@ std::tuple<int, int, int, int> QPainterViewObject::drawLine(int x1, int y1, int 
 
     if(getSeeing()) painter->drawLine(x1, y1, x2, y2);
 
+    if(haveToDeletePainter) {
+        delete painter;
+        painter = nullptr;
+    }
+
     return std::tuple<int,int,int,int>(x1,y1,x2,y2);
 }
 
 std::tuple<int, int, int, int> QPainterViewObject::drawCircle(int x, int y, int radius)
 {
-    if(painter == nullptr) throw "Painter null reference";
+    bool haveToDeletePainter = false;
+    if(painter == nullptr) {
+        if(getGetingSize()){
+            painter = new QPainter();
+            haveToDeletePainter = true;
+        }
+        else throw "Painter null reference";
+    }
 
     int r,g,b;
     std::tie(r, g, b) = getLineColor();
@@ -44,13 +62,25 @@ std::tuple<int, int, int, int> QPainterViewObject::drawCircle(int x, int y, int 
 
     if(getSeeing()) painter->drawEllipse(x,y,radius,radius);
 
+    if(haveToDeletePainter) {
+        delete painter;
+        painter = nullptr;
+    }
+
     return std::tuple<int,int,int,int>(x-radius, y-radius, x+radius, y + radius);
 
 }
 
 std::tuple<int, int, int, int> QPainterViewObject::drawText(std::string text, int x, int y)
 {
-    if(painter == nullptr) throw "Painter null reference";
+    bool haveToDeletePainter = false;
+    if(painter == nullptr) {
+        if(getGetingSize()){
+            painter = new QPainter();
+            haveToDeletePainter = true;
+        }
+        else throw "Painter null reference";
+    }
 
     int r, g, b;
     std::tie(r, g, b) = getTextColor();
@@ -66,12 +96,25 @@ std::tuple<int, int, int, int> QPainterViewObject::drawText(std::string text, in
     QFontMetrics metric = painter->fontMetrics();
     setPointer(x + metric.width(QString::fromStdString(text)),y);
 
+    if(haveToDeletePainter) {
+        delete painter;
+        painter = nullptr;
+    }
+
     return std::tuple<int,int,int,int>(x,y - (metric.height() - metric.xHeight()),x+metric.width(QString::fromStdString(text)), y);
 }
 
 std::tuple<int, int, int, int> QPainterViewObject::draw32UnicodeChar(uint32_t ch, int x, int y)
 {
-    if(painter == nullptr) throw "Painter null reference";
+    bool haveToDeletePainter = false;
+    if(painter == nullptr) {
+        if(getGetingSize()){
+            painter = new QPainter();
+            haveToDeletePainter = true;
+        }
+        else throw "Painter null reference";
+    }
+
     int r, g, b;
     std::tie(r, g, b) = getTextColor();
     defaultPen.setColor(QColor(r, g, b));
@@ -84,6 +127,11 @@ std::tuple<int, int, int, int> QPainterViewObject::draw32UnicodeChar(uint32_t ch
     if(getSeeing()) painter->drawText(x, y - round(static_cast<float>(getTextSize())/10), QString(QChar(ch)));
     QFontMetrics metric = painter->fontMetrics();
     setPointer(x + metric.width(QString(QChar(ch))),y);
+
+    if(haveToDeletePainter) {
+        delete painter;
+        painter = nullptr;
+    }
 
     return std::tuple<int,int,int,int>(x,y - metric.xHeight(),x+metric.width(QString(QChar(ch))), y);
 }

@@ -14,6 +14,7 @@ public:
     std::tuple<int, int, int, int> getSize();
     void link(MathOperand *exp);
     bool isLinked();
+    int txtSizeFromHeight(int height);
 
 
 private:

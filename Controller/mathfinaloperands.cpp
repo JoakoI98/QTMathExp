@@ -55,35 +55,38 @@ MathConstant::MathConstant(double value): value(value)
 std::tuple<int, int, int, int> MathConstant::drawExpression(ModelViewPrimitives *primitivesReference) const
 {
     MathOperand::drawExpression(primitivesReference);
+
     ModelViewPrimitives *__ModelView = primitivesReference;
     if(primitivesReference == nullptr) __ModelView = ModelView;
+
     char buff[BUFF_SIZE];
     std::sprintf(buff,"%.5f",value);
     bool finded = false;
     unsigned int rec = 0;
+    unsigned int i = 0;
     for(char &c : buff){
-        if(c == '.'){
-            c = primitivesReference->getCommaRepresentation();
+        if(c == '.' && i <= __ModelView->getFloatRepresentation()){
+            c = __ModelView->getCommaRepresentation();
             finded = true;
             rec = 0;
-            if(primitivesReference->getFloatRepresentation() == 0) {
+            if(__ModelView->getFloatRepresentation() == 0) {
                 c = 0;
                 break;
             }
 
         }
         if (finded){
-            if(rec > primitivesReference->getFloatRepresentation()){
+            if(rec > __ModelView->getFloatRepresentation()){
                 c = 0;
             }
             rec++;
         }
+        i++;
     }
-    if(primitivesReference->getFloatRepresentation() > 0 && finded == true){
-        std::cout << "Corriendo" << std::endl;
+    if(__ModelView->getFloatRepresentation() > 0 && finded == true){
         for (int i = BUFF_SIZE; i > 0; i--) {
             if(buff[i] == '0' || buff[i] == 0) buff[i] = 0;
-            else if(buff[i] == primitivesReference->getCommaRepresentation()){
+            else if(buff[i] == __ModelView->getCommaRepresentation()){
                 buff[i] = 0;
                 break;
             }

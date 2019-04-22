@@ -104,6 +104,7 @@ std::tuple<int, int, int, int> MathBinaryOperand::drawExpression(ModelViewPrimit
 {
 
     MathOperand::drawExpression(primitivesReference);
+
     ModelViewPrimitives *__ModelView = primitivesReference;
     if(primitivesReference == nullptr) __ModelView = ModelView;
 
@@ -111,17 +112,17 @@ std::tuple<int, int, int, int> MathBinaryOperand::drawExpression(ModelViewPrimit
     int x,y;
     std::tie(x,y) = __ModelView->getPointer();
     int txtSize = __ModelView->getTextSize();
-    x+= 3 + static_cast<int>(round(txtSize/17.));
+    x += 1 + static_cast<int>(round(txtSize/17.));
     __ModelView->setPointer(x,y);
     drawThis(__ModelView);
     std::tie(x,y) = __ModelView->getPointer();
-    x+=3;
+    x += 3 + static_cast<int>(round(txtSize/17.));;
     __ModelView->setPointer(x,y);
     std::tuple<int,int,int,int> rect1 = arguments[1]->drawExpression(__ModelView);
     int x00, x01, x10, x11, y00, y01, y10, y11;
     std::tie(x00,y00,x01,y01) = rect0;
     std::tie(x10,y10,x11,y11) = rect1;
-    return std::tuple<int,int,int,int>(x00,y00 > y10 ? y00 : y10,x11, y01 > y11 ? y01 : y11);
+    return std::tuple<int,int,int,int>(x00,y00 > y10 ? y10 : y00,x11, y01 > y11 ? y01 : y11);
 }
 MathSubsOperator::MathSubsOperator(MathOperand const *arg1, MathOperand const *arg2): MathBinaryOperand (arg1, arg2)
 {
@@ -208,8 +209,56 @@ double MathDivOperator::evaluateExpression(std::vector<double> &arguments) const
 
 std::tuple<int, int, int, int> MathDivOperator::drawExpression(ModelViewPrimitives *primitivesReference) const
 {
-    MathOperand::drawExpression();
-    return std::tuple<int,int,int,int>(0,0,0,0);
+    MathOperand::drawExpression(primitivesReference);
+
+    ModelViewPrimitives *__ModelView = primitivesReference;
+    if(primitivesReference == nullptr) __ModelView = ModelView;
+
+    int s0x0 = 0, s0x1 = 73, s0y0 = 15, s0y1 = 30;
+    std::tie(s0x0,s0y0,s0x1,s0y1) = arguments[0]->getSize(__ModelView);
+    int s1x0 =0 , s1x1 = 12, s1y0 = 15, s1y1 = 30;
+    std::tie(s1x0,s1y0,s1x1,s1y1) = arguments[1]->getSize(__ModelView);
+
+    const MathOperand *bigger, *smaller;
+    int biggerWeith, smallerWeith;
+
+    if(abs(s0x1-s0x0) > abs(s1x1-s1x0)){
+        bigger = arguments[0];
+        smaller = arguments[1];
+        biggerWeith = abs(s0x1-s0x0);
+        smallerWeith = abs(s1x1-s1x0);
+    } else{
+        bigger = arguments[1];
+        smaller = arguments[0];
+        smallerWeith = abs(s0x1-s0x0);
+        biggerWeith = abs(s1x1-s1x0);
+    }
+
+    int _px,_py;
+    std::tie(_px,_py) = __ModelView->getPointer();
+    __ModelView->setPointer(_px,_py - __ModelView->getTextSize()/2 + __ModelView->getTextSize()/10);
+    __ModelView->setLineSize(1+floor(__ModelView->getTextSize()/20));
+    __ModelView->drawPointerLine(_px+biggerWeith, _py - __ModelView->getTextSize()/2 + __ModelView->getTextSize()/10, true);
+
+    std::tuple<int, int, int, int> rect = {0,0,0,0};
+
+    if(bigger == arguments[0]){
+        __ModelView->setPointer(_px,_py - __ModelView->getTextSize()/2 - (5 + abs(_py - s0y1)));
+        arguments[0]->drawExpression(__ModelView);
+        __ModelView->setPointer(_px + biggerWeith/2 - smallerWeith/2,_py - __ModelView->getTextSize()/2 + (5 + abs(_py - s1y0)));
+        arguments[1]->drawExpression(__ModelView);
+        rect = {_px, _py - __ModelView->getTextSize()/2 - abs(s0y1 -s0y0) - 5, _px + biggerWeith, _py - __ModelView->getTextSize()/2 + abs(s1y1 -s1y0) + 5};
+    } else {
+        __ModelView->setPointer(_px + biggerWeith/2 - smallerWeith/2, _py - __ModelView->getTextSize()/2 - (5 + abs(_py - s0y1)));
+        arguments[0]->drawExpression(__ModelView);
+        __ModelView->setPointer(_px, _py - __ModelView->getTextSize()/2 + (5 + abs(_py - s1y0)));
+        arguments[1]->drawExpression(__ModelView);
+        rect = {_px, _py - __ModelView->getTextSize()/2 - abs(s0y1 -s0y0) - 5, _px + biggerWeith, _py - __ModelView->getTextSize()/2 + abs(s1y1 -s1y0) + 5};
+
+    }
+
+    __ModelView->setPointer(_px+biggerWeith, _py);
+    return rect;
 }
 
 
@@ -239,8 +288,109 @@ MathOperand &operator*(MathOperand &operand0, const MathOperand &operand1)
     return *ne;
 }
 
+MathOperand &operator^(MathOperand &operand0, const MathOperand &operand1)
+{
+    MathPowerOperator *ne = new MathPowerOperator(&operand0, &operand1);
+    return *ne;
+}
+
 MathOperand &operator-(const MathOperand &operand0){
     MathConstant *minus = new MathConstant(-1);
     MathMultOperator *negative = new MathMultOperator(minus,&operand0);
     return *negative;
+}
+
+MathPowerOperator::MathPowerOperator(const MathOperand *arg1, const MathOperand *arg2): MathBinaryOperand (arg1, arg2)
+{
+    setOp_Type(MathOperand::op_Power);
+    setStringRep("^");
+    return;
+}
+
+double MathPowerOperator::evaluateExpression(std::vector<double> &arguments) const
+{
+
+    return pow(this->arguments[0]->evaluateExpression(arguments),this->arguments[1]->evaluateExpression(arguments));
+}
+
+std::tuple<int, int, int, int> MathPowerOperator::drawExpression(ModelViewPrimitives *primitivesReference) const
+{
+    ModelViewPrimitives *__ModelView = primitivesReference;
+    if(primitivesReference == nullptr) __ModelView = ModelView;
+
+    int s0x0 = 0, s0x1 = 73, s0y0 = 15, s0y1 = 30;
+    int s1x0 =0 , s1x1 = 12, s1y0 = 15, s1y1 = 30;
+
+    std::tie(s0x0, s0y0, s0x1, s0y1) = arguments[0]->drawExpression(__ModelView);
+
+    int oldTxtSize = __ModelView->getTextSize();
+    __ModelView->setTextSizeNF(round(static_cast<float>(oldTxtSize)/1.2));
+    std::tie(s1x0, s1y0, s1x1, s1y1) = arguments[1]->getSize(__ModelView);
+
+    int _px, _py;
+    std::tie(_px, _py) = __ModelView->getPointer();
+    __ModelView->setPointer(_px+__ModelView->getTextSize()/70,_py - abs(s0y1 - s0y0) - abs(s1y1 - _py) + abs(s1y1-s1y0)/10 +3+__ModelView->getTextSize()/5);
+
+    std::tie(s1x0, s1y0, s1x1, s1y1) = arguments[1]->drawExpression(__ModelView);
+
+    __ModelView->setPointer(s1x1, _py);
+    __ModelView->setTextSize(oldTxtSize);
+
+    return std::tuple<int, int, int, int>(s0x0, s0y0 > s1y0 ? s1y0 : s0y0, s1x1,  s0y1 > s1y1 ? s0y1 : s1y1);
+
+
+}
+
+MathRootrOperator::MathRootrOperator(const MathOperand *arg1, const MathOperand *arg2) : MathBinaryOperand (arg1, arg2)
+{
+    setOp_Type(MathOperand::op_Root);
+    setStringRep("root");
+    return;
+}
+
+double MathRootrOperator::evaluateExpression(std::vector<double> &arguments) const
+{
+    return pow(this->arguments[1]->evaluateExpression(arguments),1.0/(this->arguments[0]->evaluateExpression(arguments)));
+}
+
+std::tuple<int, int, int, int> MathRootrOperator::drawExpression(ModelViewPrimitives *primitivesReference) const
+{
+    ModelViewPrimitives *__ModelView = primitivesReference;
+    if(primitivesReference == nullptr) __ModelView = ModelView;
+    int s0x0 = 0, s0x1 = 73, s0y0 = 15, s0y1 = 30;
+    int s1x0 =0 , s1x1 = 12, s1y0 = 15, s1y1 = 30;
+
+    std::tie(s0x0, s0y0, s0x1, s0y1) = arguments[1]->getSize(__ModelView);
+
+    int oldTxtSize = __ModelView->getTextSize();
+    __ModelView->setTextSizeNF(round(static_cast<float>(oldTxtSize)/1.2));
+    std::tie(s1x0, s1y0, s1x1, s1y1) = arguments[0]->getSize(__ModelView);
+    if(abs(s1y1-s0y0) > abs(s0y1-s0y0)){
+        __ModelView->setTextSizeNF(round(static_cast<float>(oldTxtSize)/2.2));
+        std::tie(s1x0, s1y0, s1x1, s1y1) = arguments[0]->getSize(__ModelView);
+    }
+    int _px, _py;
+    std::tie(_px, _py) = __ModelView->getPointer();
+    __ModelView->setPointer(_px, _py - __ModelView->getTextSize()/2 + _py - s1y1 - 3 - oldTxtSize/20);
+    std::tie(s1x0, s1y0, s1x1, s1y1) = arguments[0]->drawExpression(__ModelView);
+    __ModelView->setTextSizeNF(oldTxtSize);
+
+    int oldLineSize = __ModelView->getLineSize();
+    __ModelView->setLineSize(oldTxtSize/10);
+    int middleWidth = abs(s1x1-s1x0)/2;
+    __ModelView->setPointer(_px + middleWidth, s1y1 + 3 + oldTxtSize/20);
+    if(middleWidth < 2 + __ModelView->getTextSize()/15) middleWidth = 2 + __ModelView->getTextSize()/15;
+    __ModelView->drawPointerLine(_px + middleWidth + abs(s1x1-s1x0)/2, s0y1);
+    int __px = _px + middleWidth + abs(s1x1-s1x0)/2 + 5 + oldTxtSize/10;
+    __ModelView->drawPointerLine(__px, s0y0 - 2 - oldTxtSize/15);
+    __ModelView->drawPointerLine(__px + abs(s0x1-s0x0) + 3 + oldTxtSize/8 ,s0y0 - 2 - oldTxtSize/15);
+    __ModelView->setLineSize(oldLineSize);
+
+    __ModelView->setPointer(__px + 2 + oldTxtSize/10, _py);
+    arguments[1]->drawExpression(__ModelView);
+
+
+
+    return std::tuple<int, int, int, int>(s1x0, s1y0 >  s0y0 - 2 - oldTxtSize/15 ?  s0y0 - 2 - oldTxtSize/15 : s1y0, __px + abs(s0x1-s0x0) + 3 + oldTxtSize/8 , s0y1);
+
 }

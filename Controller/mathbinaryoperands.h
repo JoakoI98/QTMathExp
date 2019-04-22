@@ -69,6 +69,31 @@ public:
 
 };
 
+class MathPowerOperator : public MathBinaryOperand
+{
+public:
+    MathPowerOperator(MathOperand const *arg1, MathOperand const *arg2);
+
+    double evaluateExpression(std::vector<double> &arguments) const override;
+
+    std::tuple<int,int,int,int> drawExpression(ModelViewPrimitives *primitivesReference = nullptr) const override;
+
+    void drawThis(ModelViewPrimitives *primitivesReference = nullptr) const override {return;}
+
+};
+
+class MathRootrOperator : public MathBinaryOperand
+{
+public:
+    MathRootrOperator(MathOperand const *arg1, MathOperand const *arg2);
+
+    double evaluateExpression(std::vector<double> &arguments) const override;
+
+    std::tuple<int,int,int,int> drawExpression(ModelViewPrimitives *primitivesReference = nullptr) const override;
+
+    void drawThis(ModelViewPrimitives *primitivesReference = nullptr) const override {return;}
+
+};
 
 
 #endif // MATHBINARYOPERANDS_H

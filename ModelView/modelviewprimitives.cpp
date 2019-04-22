@@ -14,36 +14,46 @@ ModelViewPrimitives::ModelViewPrimitives()
     setTextSize(DefaultTextSize);
 }
 
-std::tuple<int,int,int,int> ModelViewPrimitives::drawPointerLine(int x2, int y2)
+std::tuple<int,int,int,int> ModelViewPrimitives::drawPointerLine(int x2, int y2, bool blockPointer)
 {
     int x,y;
     std::tie(x,y) = pointer;
     std::tuple<int,int,int,int> rect = drawLine(x,y,x2,y2);
-    pointer = {x2,y2};
+    if(!blockPointer) pointer = {x2,y2};
     return rect;
 }
 
-std::tuple<int,int,int,int> ModelViewPrimitives::drawPointerCircle(int radius)
+std::tuple<int,int,int,int> ModelViewPrimitives::drawPointerCircle(int radius, bool blockPointer)
 {
     int x,y;
     std::tie(x,y) = pointer;
     std::tuple<int,int,int,int> rect = drawCircle(x+radius, y, radius);
-    pointer = {x + 2*radius, y};
+    if(!blockPointer) pointer = {x + 2*radius, y};
     return rect;
 }
 
-std::tuple<int,int,int,int> ModelViewPrimitives::drawPointerText(std::string text)
+std::tuple<int,int,int,int> ModelViewPrimitives::drawPointerText(std::string text, bool blockPointer)
 {
     int x,y;
     std::tie(x,y) = pointer;
-    return drawText(text,x ,y);
+    std::tuple<int,int,int,int> rect = drawText(text,x ,y);
+    if(blockPointer){
+        pointer = {x,y};
+    }
+
+    return rect;
 }
 
-std::tuple<int,int,int,int> ModelViewPrimitives::drawPointer32UnicodeChar(uint32_t ch)
+std::tuple<int,int,int,int> ModelViewPrimitives::drawPointer32UnicodeChar(uint32_t ch, bool blockPointer)
 {
     int x,y;
     std::tie(x,y) = pointer;
-    return draw32UnicodeChar(ch, x, y);
+    std::tuple<int,int,int,int> rect = draw32UnicodeChar(ch, x, y);
+    if(blockPointer){
+        pointer = {x,y};
+    }
+
+    return rect;
 }
 
 std::pair<int, int> ModelViewPrimitives::getPointer() const
@@ -99,16 +109,13 @@ int ModelViewPrimitives::getTextSize() const
 void ModelViewPrimitives::setTextSize(int value)
 {
     int tz = value;
-    if(value > 15) tz = 15;
-    else if(value < 12) tz = 12;
+    if(value < 12) tz = 12;
     textSize = tz;
 }
 
 void ModelViewPrimitives::setTextSizeNF(int value)
 {
-    int tz = value;
-    if(value > 15) tz = 15;
-    textSize = tz;
+    textSize = value;
 }
 
 int ModelViewPrimitives::getLineSize() const
@@ -124,6 +131,16 @@ void ModelViewPrimitives::setLineSize(int value)
 ModelViewPrimitives::~ModelViewPrimitives()
 {
     return;
+}
+
+bool ModelViewPrimitives::getGetingSize() const
+{
+    return getingSize;
+}
+
+void ModelViewPrimitives::setGetingSize(bool value)
+{
+    getingSize = value;
 }
 
 unsigned int ModelViewPrimitives::getFloatRepresentation() const

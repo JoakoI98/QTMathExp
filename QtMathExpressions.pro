@@ -33,7 +33,9 @@ SOURCES += \
     ModelView/modelviewprimitives.cpp \
     View/qpainterviewobject.cpp \
     View/expressionwidget.cpp \
-    ModelView/modelviewlinker.cpp
+    ModelView/modelviewlinker.cpp \
+    Controller/mathunaryoperands.cpp \
+    Controller/_pythoncontroller.cpp
 
 HEADERS += \
     Controller/mathbinaryoperands.h \
@@ -42,9 +44,19 @@ HEADERS += \
     ModelView/modelviewprimitives.h \
     View/qpainterviewobject.h \
     View/expressionwidget.h \
-    ModelView/modelviewlinker.h
+    ModelView/modelviewlinker.h \
+    Controller/mathunaryoperands.h \
+    Controller/_pythoncontroller.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+win32: LIBS += -L'C:/Python 3.7/libs/' -lpython37
+
+INCLUDEPATH += 'C:/Python 3.7/include'
+DEPENDPATH += 'C:/Python 3.7/include'
+
+win32:!win32-g++: PRE_TARGETDEPS += 'C:/Python 3.7/libs/python37.lib'
+else:win32-g++: PRE_TARGETDEPS += 'C:/Python 3.7/libs/libpython37.a'
