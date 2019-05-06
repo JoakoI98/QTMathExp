@@ -11,6 +11,22 @@ MathUnaryOperands::MathUnaryOperands(const MathOperand *arg1)
     arguments.push_back(arg1);
 }
 
+void MathUnaryOperands::printExpression(std::ostream &buff) const
+{
+    //buff.flush();
+    buff << strRep << '(' << arguments[0] << ") ";
+    //buff.flush();
+}
+
+void MathUnaryOperands::printExpressionP(std::ostream &buff) const
+{
+    //buff.flush();
+    buff << strRep << '(';
+    arguments[0]->printExpressionP(buff);
+    buff << ") ";
+    //buff.flush();
+}
+
 std::tuple<int, int, int, int> MathUnaryOperands::drawExpression(ModelViewPrimitives *primitivesReference) const
 {
     ModelViewPrimitives *__ModelView = primitivesReference;
@@ -55,6 +71,12 @@ std::tuple<int, int, int, int> MathUnaryOperands::drawExpression(ModelViewPrimit
 
 }
 
+std::string MathUnaryOperands::getStringOp() const
+{
+    std::string strRet = strRep + "(" + arguments[0]->getStringOp()+")";
+    return strRet;
+}
+
 MathExpOperand::MathExpOperand(const MathOperand *arg) : MathPowerOperator (new MathConstant(M_E) ,arg)
 {
     return;
@@ -77,7 +99,7 @@ std::tuple<int, int, int, int> MathExpOperand::drawExpression(ModelViewPrimitive
     __ModelView->setTextSizeNF(round(static_cast<float>(oldTxtSize)/1.2));
     std::tie(s1x0, s1y0, s1x1, s1y1) = arguments[1]->drawExpression(__ModelView);
 
-    __ModelView->setPointer(_px + 5 + oldTxtSize/10, _py);
+    __ModelView->setPointer(s1x1, _py);
     __ModelView->setTextSize(oldTxtSize);
 
     return std::tuple<int, int, int, int>(s0x0, s0y0 > s1y0 ? s1y0 : s0y0, s1x1,  s0y1 > s1y1 ? s0y1 : s1y1);
@@ -103,4 +125,24 @@ MathLnOperand::MathLnOperand(const MathOperand *arg1): MathUnaryOperands (arg1)
 double MathLnOperand::evaluateExpression(std::vector<double> &arguments) const
 {
     return log(this->arguments[0]->evaluateExpression(arguments));
+}
+
+MathCosOperand::MathCosOperand(const MathOperand *arg1) : MathUnaryOperands (arg1)
+{
+    strRep = "cos";
+}
+
+double MathCosOperand::evaluateExpression(std::vector<double> &arguments) const
+{
+    return cos(this->arguments[0]->evaluateExpression(arguments));
+}
+
+MathTgOperand::MathTgOperand(const MathOperand *arg1) : MathUnaryOperands (arg1)
+{
+    strRep = "tg";
+}
+
+double MathTgOperand::evaluateExpression(std::vector<double> &arguments) const
+{
+    return tan(this->arguments[0]->evaluateExpression(arguments));
 }

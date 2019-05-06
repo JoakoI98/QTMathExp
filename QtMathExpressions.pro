@@ -27,7 +27,6 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
     Controller/mathbinaryoperands.cpp \
-    Controller/literalsdefinitions.cpp \
     Controller/mathfinaloperands.cpp \
     Controller/mathoperand.cpp \
     ModelView/modelviewprimitives.cpp \
@@ -35,7 +34,9 @@ SOURCES += \
     View/expressionwidget.cpp \
     ModelView/modelviewlinker.cpp \
     Controller/mathunaryoperands.cpp \
-    Controller/_pythoncontroller.cpp
+    Controller/_pythoncontroller.cpp \
+    View/qlatexviwer.cpp \
+    View/qexplatexwidget.cpp
 
 HEADERS += \
     Controller/mathbinaryoperands.h \
@@ -46,7 +47,12 @@ HEADERS += \
     View/expressionwidget.h \
     ModelView/modelviewlinker.h \
     Controller/mathunaryoperands.h \
-    Controller/_pythoncontroller.h
+    Controller/literalsdefinitions.h \
+    Controller/_pythoncontroller.h \
+    Controller/_mathoperandfactory.h \
+    Controller/_factoryfunctions.h \
+    View/qlatexviwer.h \
+    View/qexplatexwidget.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -1,3 +1,6 @@
+#ifndef LITERALS_H
+#define LITERALS_H
+#include "mathbinaryoperands.h"
 #include "mathfinaloperands.h"
 #include "mathunaryoperands.h"
 
@@ -38,6 +41,16 @@ MathSinOperand &_sin(MathOperand &op){
     return *newSin;
 }
 
+MathCosOperand &_cos(MathOperand &op){
+    MathCosOperand *newCos = new MathCosOperand(&op);
+    return *newCos;
+}
+
+MathTgOperand &_tg(MathOperand &op){
+    MathTgOperand *newTg = new MathTgOperand(&op);
+    return *newTg;
+}
+
 MathLnOperand &_ln(MathOperand &op){
     MathLnOperand *newLn = new MathLnOperand(&op);
     return *newLn;
@@ -47,3 +60,11 @@ MathExpOperand &_exp(MathOperand &op){
     MathExpOperand *newExp = new MathExpOperand(&op);
     return  *newExp;
 }
+
+MathOperand &_Equals(MathOperand &_izq, MathOperand &_der){
+    MathEquals *newEq = new MathEquals(&_izq, &_der);
+    return *newEq;
+}
+
+
+#endif

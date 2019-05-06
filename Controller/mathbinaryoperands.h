@@ -11,9 +11,13 @@ public:
 
     void printExpression(std::ostream &buff = std::cout) const override;
 
+    void printExpressionP(std::ostream &buff) const override;
+
     virtual void drawThis(ModelViewPrimitives *primitivesReference = nullptr) const = 0;
 
     std::tuple<int,int,int,int> drawExpression(ModelViewPrimitives *primitivesReference = nullptr) const override;
+
+    std::string getStringOp() const override;
 
 protected:
     void setStringRep(const std::string &value);
@@ -22,6 +26,18 @@ private:
     std::string stringRep;
 };
 
+
+class MathEquals : public MathBinaryOperand
+{
+public:
+    MathEquals(MathOperand const *arg1, MathOperand const *arg2);
+
+    double evaluateExpression(std::vector<double> &arguments) const override;
+
+
+
+    void drawThis(ModelViewPrimitives *primitivesReference = nullptr) const override;
+};
 
 
 class MathAddOperator : public MathBinaryOperand

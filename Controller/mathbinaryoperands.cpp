@@ -100,6 +100,50 @@ void MathBinaryOperand::printExpression(std::ostream &buff) const
     buff << strFix[0] << this->arguments[0] << strFix[1] << stringRep << strFix[2] << this->arguments[1] << strFix[3];
 }
 
+
+void MathBinaryOperand::printExpressionP(std::ostream &buff) const
+{
+    MathOperand::typeEnum arg0Type = this->arguments[0]->getOp_Type();
+    MathOperand::typeEnum arg1Type = this->arguments[1]->getOp_Type();
+
+    if(this->getOp_Type() == MathOperand::op_Mult){
+        if(arg0Type == MathOperand::op_Const){
+            const MathConstant *cons = dynamic_cast<const MathConstant *>(this->arguments[0]);
+            if(cons->getValue() == -1){
+                buff << "-" << this->arguments[1];
+                return;
+            }
+        }
+
+        if(arg1Type == MathOperand::op_Const){
+            const MathConstant *cons = dynamic_cast<const MathConstant *>(this->arguments[1]);
+            if(cons->getValue() == -1){
+                buff << "-" << this->arguments[0];
+                return;
+            }
+        }
+    }
+
+    std::string strFix[4];
+    for (int i = 0;i != 4;i++) {
+        strFix[i] = "";
+    }
+    if(arg0Type != MathOperand::op_Const && arg0Type != MathOperand::op_Var){
+        strFix[0] = "(";
+        strFix[1] = "\b) ";
+    }
+    if(arg1Type != MathOperand::op_Const && arg1Type != MathOperand::op_Var){
+        strFix[2] = "(";
+        strFix[3] = "\b) ";
+    }
+    buff << strFix[0];
+
+    this->arguments[0]->printExpressionP(buff);
+    buff << strFix[1] << stringRep << strFix[2];
+    this->arguments[1]->printExpressionP(buff);
+    buff << strFix[3];
+}
+
 std::tuple<int, int, int, int> MathBinaryOperand::drawExpression(ModelViewPrimitives *primitivesReference) const
 {
 
@@ -123,6 +167,13 @@ std::tuple<int, int, int, int> MathBinaryOperand::drawExpression(ModelViewPrimit
     std::tie(x00,y00,x01,y01) = rect0;
     std::tie(x10,y10,x11,y11) = rect1;
     return std::tuple<int,int,int,int>(x00,y00 > y10 ? y10 : y00,x11, y01 > y11 ? y01 : y11);
+}
+
+std::string MathBinaryOperand::getStringOp() const
+{
+    using namespace std;
+    string strRet = "(" + arguments[0]->getStringOp() + ")" + stringRep + "(" + arguments[1]->getStringOp() + ")";
+    return strRet;
 }
 MathSubsOperator::MathSubsOperator(MathOperand const *arg1, MathOperand const *arg2): MathBinaryOperand (arg1, arg2)
 {
@@ -393,4 +444,29 @@ std::tuple<int, int, int, int> MathRootrOperator::drawExpression(ModelViewPrimit
 
     return std::tuple<int, int, int, int>(s1x0, s1y0 >  s0y0 - 2 - oldTxtSize/15 ?  s0y0 - 2 - oldTxtSize/15 : s1y0, __px + abs(s0x1-s0x0) + 3 + oldTxtSize/8 , s0y1);
 
+}
+
+MathEquals::MathEquals(const MathOperand *arg1, const MathOperand *arg2): MathBinaryOperand (arg1, arg2)
+{
+    setOp_Type(MathOperand::op_Equ);
+    setStringRep("= ");
+    return;
+}
+
+double MathEquals::evaluateExpression(std::vector<double> &arguments) const
+{
+    throw "Trying to evaluate equals";
+}
+
+void MathEquals::drawThis(ModelViewPrimitives *primitivesReference) const
+{
+    int curr_x, curr_y;
+
+    std::tie(curr_x, curr_y) = primitivesReference->getPointer();
+    primitivesReference->setPointer(curr_x, curr_y -  1);
+
+    primitivesReference->drawPointerText("=");
+
+    std::tie(curr_x, curr_y) = primitivesReference->getPointer();
+    primitivesReference->setPointer(curr_x, curr_y + 1);
 }

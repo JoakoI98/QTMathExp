@@ -4,54 +4,48 @@
 #include <vector>
 #include <string>
 #include "mathoperand.h"
-
-using namespace std;
-
-
+#include <map>
+#include "_mathoperandfactory.h"
 
 
 
-class _pythonController
-{
-public:
-    _pythonController();
-
-    static void prtNewStr(string _strParse);
-
-    ~_pythonController();
-
-private:
-    class op_Divider{
+class op_Divider{
     public:
         unsigned int argsNumber;
-        vector<op_Divider *> args;
-        string _strRep;
-        string _symbol;
+        std::vector<op_Divider *> args;
+        std::string _strRep;
+        std::string _symbol;
         double _value;
         void printStr();
-        MathOperand &convertMathOperand();
+        MathOperand &convertMathOperand(std::vector<std::string> *symbolList = nullptr);
+        static op_Divider *getDividerFromString(std::string str);
         op_Divider(PyObject *obj);
+        op_Divider();
+        op_Divider(std::string strR);
+        op_Divider(std::string strR, std::string strSym);
+        op_Divider(std::string strR, double value);
+
         ~op_Divider();
-    };
 
 
-
-    static op_Divider &_pyObjectToDivider(PyObject *_pyObject);
-
-    vector<string> symbolTable;
-
-    MathOperand &_classConverterAdd(_pythonController::op_Divider divider);
-    MathOperand &_classConverterSubs(_pythonController::op_Divider divider);
-    MathOperand &_classConverterMult(_pythonController::op_Divider divider);
-    MathOperand &_classConverterDiv(_pythonController::op_Divider divider);
-    MathOperand &_classConverterSin(_pythonController::op_Divider divider);
-    MathOperand &_classConverterLn(_pythonController::op_Divider divider);
-    MathOperand &_classConverterPow(_pythonController::op_Divider divider);
-    MathOperand &_classConverterExp(_pythonController::op_Divider divider);
-    MathOperand &_classConverterSymbol(_pythonController::op_Divider divider);
-    MathOperand &_classConverterConstant(_pythonController::op_Divider divider);
-
+        static PyObject *PyModuleS;
+        static PyObject *PyMakeExpS;
+        static PyObject *PyRenderOpS;
+        static PyObject *PyOpDividerS;
+        static PyObject *PyOpDividerFromStrS;
 };
+
+//PyObject *op_Divider::PyModuleS = nullptr;
+//PyObject *op_Divider::PyMakeExpS = nullptr;
+//PyObject *op_Divider::PyRenderOpS = nullptr;
+//PyObject *op_Divider::PyOpDividerS = nullptr;
+namespace _pyOperations {
+    void pySetUp(std::string fName);
+    std::string GetCurrentWorkingDir();
+    void renderLatexFormula(MathOperand &op, std::string fName);
+    void deleteTmp();
+}
+
 
 
 

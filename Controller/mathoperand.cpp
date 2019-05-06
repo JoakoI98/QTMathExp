@@ -46,7 +46,7 @@ std::tuple<int, int, int, int> MathOperand::getSize(ModelViewPrimitives *primiti
 
 std::ostream &operator<<(std::ostream &os, const MathOperand &operand)
 {
-    operand.printExpression(os);
+    operand.printExpressionP(os);
     return os;
 }
 
@@ -70,6 +70,8 @@ void MathOperand::setOp_Type(const MathOperand::typeEnum &value)
 {
     op_Type = value;
 }
+
+
 
 ModelViewPrimitives *MathOperand::getModelView() const
 {
